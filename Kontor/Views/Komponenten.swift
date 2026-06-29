@@ -365,6 +365,7 @@ struct AbschlussHero: View {
         .contentShape(Rectangle())
         .onTapGesture { kopiereInZwischenablage(m.wert) }
         .help("Klicken, um den Wert zu kopieren")
+        .contextMenu { Button("Wert kopieren") { kopiereInZwischenablage(m.wert) } }
     }
 }
 
@@ -435,6 +436,20 @@ struct KopierHaken: View {
                 .transition(.opacity)
         }
     }
+}
+
+/// Formatiert einen gerundeten Eurobetrag als ganzzahligen deutschen String (ohne Nachkommastellen)
+/// – für Chart-Annotationen, wo kein Cent-Stellenwert nötig ist.
+func kompakt(_ d: Double) -> String { Int(d.rounded()).formatted(.number.locale(Locale(identifier: "de_DE"))) }
+
+/// Signierte Quadratwurzel: staucht Ausreißer (Mittelweg linear↔log), behält das Vorzeichen.
+/// Wird für die Y-Achsen-Skalierung in Balkendiagrammen verwendet.
+func wurzel(_ w: Double) -> Double { copysign(sqrt(abs(w)), w) }
+
+/// Gibt an, ob ein Monat noch in der Zukunft liegt – verhindert Zukunftsbalken in Charts.
+func istZukunftsmonat(_ m: Int, jahr: Int) -> Bool {
+    let hJ = appKalender.component(.year, from: Date()), hM = appKalender.component(.month, from: Date())
+    return jahr > hJ || (jahr == hJ && m > hM)
 }
 
 /// Nativer Bestätigungsdialog vor dem Löschen – verhindert versehentlichen Datenverlust.
