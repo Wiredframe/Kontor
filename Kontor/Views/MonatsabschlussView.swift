@@ -459,7 +459,7 @@ struct MonatsabschlussView: View {
         }
         .frame(maxWidth: .infinity, alignment: .leading)
         .contentShape(Rectangle())
-        .onTapGesture { kopiere(wert) }
+        .onTapGesture { kopiereInZwischenablage(wert) }
         .help("Klicken, um den Wert zu kopieren")
     }
 
@@ -477,13 +477,6 @@ struct MonatsabschlussView: View {
         .contentShape(Rectangle())
         .onTapGesture { kopiereInZwischenablage(wert) }
         .help("Klicken, um den Wert zu kopieren")
-    }
-
-    private func kopiere(_ wert: Decimal) {
-        let text = wert.formatted(.number.grouping(.never).precision(.fractionLength(2))
-            .locale(Locale(identifier: "de_DE")))
-        NSPasteboard.general.clearContents()
-        NSPasteboard.general.setString(text, forType: .string)
     }
 
     // MARK: Aktionen
