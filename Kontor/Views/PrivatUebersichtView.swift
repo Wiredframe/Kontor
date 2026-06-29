@@ -65,11 +65,6 @@ struct PrivatUebersichtView: View {
             return (name: kurzMonat(m), wert: (d as NSDecimalNumber).doubleValue)
         }
     }
-    private func istZukunftsmonat(_ m: Int, jahr: Int) -> Bool {
-        let hJ = appKalender.component(.year, from: Date()), hM = appKalender.component(.month, from: Date())
-        return jahr > hJ || (jahr == hJ && m > hM)
-    }
-
     var body: some View {
         @Bindable var zeit = zeit
         return VStack(spacing: 0) {
@@ -154,9 +149,6 @@ struct PrivatUebersichtView: View {
         Text("Keine Einträge.").font(.callout).foregroundStyle(.secondary)
             .frame(maxWidth: .infinity, alignment: .leading).padding(.vertical, 4)
     }
-    private func kompakt(_ d: Double) -> String { Int(d.rounded()).formatted(.number.locale(Locale(identifier: "de_DE"))) }
-    /// Signierte Quadratwurzel: staucht Ausreißer (Mittelweg linear↔log), behält das Vorzeichen.
-    private func wurzel(_ w: Double) -> Double { copysign(sqrt(abs(w)), w) }
     /// Y-Bereich mit Kopf-/Fußraum, damit die Wert-Labels über den Balken Platz haben.
     private var yBereich: ClosedRange<Double> {
         let w = chartDaten.map { wurzel($0.wert) }
