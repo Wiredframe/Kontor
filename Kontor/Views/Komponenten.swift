@@ -111,6 +111,13 @@ struct MonatJahrWaehler: View {
     }
 }
 
+/// Liegt der Monat `m` im Jahr `jahr` noch in der Zukunft (über den laufenden Monat hinaus)?
+/// Wird in Chart-Views genutzt, um Balken für künftige Monate auszublenden.
+func istZukunftsmonat(_ m: Int, jahr: Int) -> Bool {
+    let hJ = appKalender.component(.year, from: Date()), hM = appKalender.component(.month, from: Date())
+    return jahr > hJ || (jahr == hJ && m > hM)
+}
+
 func monatsName(_ monat: Int) -> String {
     let df = DateFormatter(); df.locale = Locale(identifier: "de_DE")
     let symbols = df.monthSymbols ?? []
